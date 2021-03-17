@@ -310,7 +310,7 @@ router.post('/post/wash/:tarea',
         console.log('body de insert', req.body);
         query = "INSERT INTO wash (washerId, carId, recintoId, discount, photo, status, receipt, observation, washDate, updateDate) VALUES (" + req.body.washerId + "," + req.body.carId + ", " + req.body.recintoId + ", " + req.body.discount + ", '" + req.body.photo + "', " + req.body.status + ", '" + req.body.receipt + "', '" + req.body.observation + "', '" + req.body.washDate  + "', '" + req.body.updateDate  + "')"
     } else if (req.params.tarea === 'update'){
-        query = "UPDATE wash SET washerId = " + req.body.washerId + ", carId = " + req.body.carId + ", status = " + req.body.status + ", discount = " + req.body.discount + ", observation = '" + req.body.observation + "', washDate = '" + req.body.washDate + "', receipt = '" + req.body.receipt + "', updateDate = '" + req.body.updateDate + "' WHERE id = " + req.body.id + " ";
+        query = "UPDATE wash SET washerId = " + req.body.washerId + ", carId = " + req.body.carId + ", status = " + req.body.status + ", discount = " + req.body.discount + ", observation = '" + req.body.observation + "', washDate = '" + req.body.washDate + "', receipt = '" + req.body.receipt + "', updateDate = '" + req.body.updateDate + "', photo = '" + req.body.photo + "' WHERE id = " + req.body.id + " ";
                                                                                                                                                                                  
     } else if (req.params.tarea === 'borrar') {
         query = "UPDATE wash SET status = 0 WHERE id = " + req.body.id + " ";
