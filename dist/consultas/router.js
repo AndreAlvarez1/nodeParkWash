@@ -81,11 +81,34 @@ router.get('/plans', function (req, res) {
     });
 });
 router.get('/washes/:fechaIni/:fechaFin/:recinto', function (req, res) {
-    let query = "SELECT w.id, w.washerId, w.status, w.carId, w.recintoId, r.nombre as recinto, w.discount, w.photo, w.receipt, w.observation, w.washDate, w.updateDate, c.patente, c.marca, c.modelo, c.color, c.tipo, c.size, u.firstName as washerFirst, u.lastName as washerLast, p.description FROM wash w  LEFT JOIN users u ON w.washerId = u.id  LEFT JOIN cars c ON w.carId = c.id LEFT JOIN plans p ON c.planId = p.id LEFT JOIN recintos r ON w.recintoId = r.id  where w.washDate between '" + req.params.fechaIni + "' AND '" + req.params.fechaFin + "' AND w.recintoId = '" + req.params.recinto + "'  ";
+    let query = "SELECT w.id, w.washerId, w.status, w.carId, w.recintoId, r.nombre as recinto, w.discount, w.receipt, w.observation, w.washDate, w.updateDate, c.patente, c.marca, c.modelo, c.color, c.tipo, c.size, u.firstName as washerFirst, u.lastName as washerLast, p.description FROM wash w  LEFT JOIN users u ON w.washerId = u.id  LEFT JOIN cars c ON w.carId = c.id LEFT JOIN plans p ON c.planId = p.id LEFT JOIN recintos r ON w.recintoId = r.id  where w.washDate between '" + req.params.fechaIni + "' AND '" + req.params.fechaFin + "' AND w.recintoId = '" + req.params.recinto + "'  ";
     if (req.params.recinto === 'Todos') {
-        query = "SELECT w.id, w.washerId, w.status, w.carId, w.recintoId, r.nombre as recinto, w.discount, w.photo, w.receipt, w.observation, w.washDate, w.updateDate, c.patente, c.marca, c.modelo, c.color, c.tipo, c.size, u.firstName as washerFirst, u.lastName as washerLast, p.description FROM wash w  LEFT JOIN users u ON w.washerId = u.id  LEFT JOIN cars c ON w.carId = c.id LEFT JOIN plans p ON c.planId = p.id LEFT JOIN recintos r ON w.recintoId = r.id  where w.washDate between '" + req.params.fechaIni + "' AND '" + req.params.fechaFin + "'   ";
+        query = "SELECT w.id, w.washerId, w.status, w.carId, w.recintoId, r.nombre as recinto, w.discount, w.receipt, w.observation, w.washDate, w.updateDate, c.patente, c.marca, c.modelo, c.color, c.tipo, c.size, u.firstName as washerFirst, u.lastName as washerLast, p.description FROM wash w  LEFT JOIN users u ON w.washerId = u.id  LEFT JOIN cars c ON w.carId = c.id LEFT JOIN plans p ON c.planId = p.id LEFT JOIN recintos r ON w.recintoId = r.id  where w.washDate between '" + req.params.fechaIni + "' AND '" + req.params.fechaFin + "'   ";
     }
     console.log('query washes', query);
+    server_1.conex.query(query, function (err, rows, fields) {
+        if (err)
+            throw err;
+        res.json({ resultado: 'ok', datos: rows });
+        // res.json({ resultado: 'ok', datos: rows[0].CODIGO });
+    });
+});
+router.get('/washesXuser/:fechaIni/:fechaFin/:user', function (req, res) {
+    const query = "SELECT w.id, w.washerId, w.status, w.carId, w.recintoId, r.nombre as recinto, w.discount, w.receipt, w.observation, w.washDate, w.updateDate, c.patente, c.marca, c.modelo, c.color, c.tipo, c.size, u.firstName as washerFirst, u.lastName as washerLast, p.description FROM wash w  LEFT JOIN users u ON w.washerId = u.id  LEFT JOIN cars c ON w.carId = c.id LEFT JOIN plans p ON c.planId = p.id LEFT JOIN recintos r ON w.recintoId = r.id  where w.washDate between '" + req.params.fechaIni + "' AND '" + req.params.fechaFin + "' AND c.userId = '" + req.params.user + "'  ";
+    console.log('query washes x usuer', query);
+    server_1.conex.query(query, function (err, rows, fields) {
+        if (err)
+            throw err;
+        res.json({ resultado: 'ok', datos: rows });
+        // res.json({ resultado: 'ok', datos: rows[0].CODIGO });
+    });
+});
+router.get('/washesXcar/:fechaIni/:fechaFin/:car', function (req, res) {
+    let query = "SELECT w.id, w.washerId, w.status, w.carId, w.recintoId, r.nombre as recinto, w.discount, w.receipt, w.observation, w.washDate, w.updateDate, c.patente, c.marca, c.modelo, c.color, c.tipo, c.size, u.firstName as washerFirst, u.lastName as washerLast, p.description FROM wash w  LEFT JOIN users u ON w.washerId = u.id  LEFT JOIN cars c ON w.carId = c.id LEFT JOIN plans p ON c.planId = p.id LEFT JOIN recintos r ON w.recintoId = r.id  where w.washDate between '" + req.params.fechaIni + "' AND '" + req.params.fechaFin + "' AND w.carId = '" + req.params.car + "'  ";
+    if (req.params.car === 'Todos') {
+        query = "SELECT w.id, w.washerId, w.status, w.carId, w.recintoId, r.nombre as recinto, w.discount, w.receipt, w.observation, w.washDate, w.updateDate, c.patente, c.marca, c.modelo, c.color, c.tipo, c.size, u.firstName as washerFirst, u.lastName as washerLast, p.description FROM wash w  LEFT JOIN users u ON w.washerId = u.id  LEFT JOIN cars c ON w.carId = c.id LEFT JOIN plans p ON c.planId = p.id LEFT JOIN recintos r ON w.recintoId = r.id  where w.washDate between '" + req.params.fechaIni + "' AND '" + req.params.fechaFin + "'   ";
+    }
+    console.log('query busco lavados por auto', query);
     server_1.conex.query(query, function (err, rows, fields) {
         if (err)
             throw err;
@@ -96,6 +119,16 @@ router.get('/washes/:fechaIni/:fechaFin/:recinto', function (req, res) {
 router.get('/wash/:id', function (req, res) {
     let query = "SELECT * FROM wash WHERE id = " + req.params.id + " ";
     console.log('query wash id', query);
+    server_1.conex.query(query, function (err, rows, fields) {
+        if (err)
+            throw err;
+        res.json({ resultado: 'ok', datos: rows });
+        // res.json({ resultado: 'ok', datos: rows[0].CODIGO });
+    });
+});
+router.get('/photos/:washId', function (req, res) {
+    let query = "SELECT * FROM photos WHERE washId = " + req.params.washId + " ";
+    console.log('query washId', query);
     server_1.conex.query(query, function (err, rows, fields) {
         if (err)
             throw err;
@@ -214,10 +247,10 @@ router.post('/post/wash/:tarea', function (req, res) {
     let query = '';
     if (req.params.tarea === 'insert') {
         console.log('body de insert', req.body);
-        query = "INSERT INTO wash (washerId, carId, recintoId, discount, photo, status, receipt, observation, washDate, updateDate) VALUES (" + req.body.washerId + "," + req.body.carId + ", " + req.body.recintoId + ", " + req.body.discount + ", '" + req.body.photo + "', " + req.body.status + ", '" + req.body.receipt + "', '" + req.body.observation + "', '" + req.body.washDate + "', '" + req.body.updateDate + "')";
+        query = "INSERT INTO wash (washerId, carId, recintoId, discount, status, receipt, observation, washDate, updateDate) VALUES (" + req.body.washerId + "," + req.body.carId + ", " + req.body.recintoId + ", " + req.body.discount + ", " + req.body.status + ", '" + req.body.receipt + "', '" + req.body.observation + "', '" + req.body.washDate + "', '" + req.body.updateDate + "')";
     }
     else if (req.params.tarea === 'update') {
-        query = "UPDATE wash SET washerId = " + req.body.washerId + ", carId = " + req.body.carId + ", status = " + req.body.status + ", discount = " + req.body.discount + ", observation = '" + req.body.observation + "', washDate = '" + req.body.washDate + "', receipt = '" + req.body.receipt + "', updateDate = '" + req.body.updateDate + "', photo = '" + req.body.photo + "' WHERE id = " + req.body.id + " ";
+        query = "UPDATE wash SET washerId = " + req.body.washerId + ", carId = " + req.body.carId + ", status = " + req.body.status + ", discount = " + req.body.discount + ", observation = '" + req.body.observation + "', washDate = '" + req.body.washDate + "', receipt = '" + req.body.receipt + "', updateDate = '" + req.body.updateDate + "' WHERE id = " + req.body.id + " ";
     }
     else if (req.params.tarea === 'borrar') {
         query = "UPDATE wash SET status = 0 WHERE id = " + req.body.id + " ";
@@ -226,6 +259,29 @@ router.post('/post/wash/:tarea', function (req, res) {
         return;
     }
     console.log('query wash ->', query);
+    server_1.conex.query(query, function (err, rows, fields) {
+        if (err)
+            throw err;
+        res.json({ resultado: 'ok', datos: rows });
+    });
+});
+router.post('/post/photos/:tarea', function (req, res) {
+    console.log('tarea', req.params.tarea);
+    let query = '';
+    if (req.params.tarea === 'insert') {
+        console.log('body de insert', req.body);
+        query = "INSERT INTO photos (washId, tipo, url, status) VALUES (" + req.body.washId + ",'" + req.body.tipo + "', '" + req.body.url + "', 1)";
+    }
+    else if (req.params.tarea === 'update') {
+        query = "UPDATE photos SET washId = " + req.body.washId + ", tipo = '" + req.body.tipo + "', url = '" + req.body.url + "' WHERE id = " + req.body.id + " ";
+    }
+    else if (req.params.tarea === 'borrar') {
+        query = "UPDATE photos SET status = " + req.body.status + " WHERE id = " + req.body.id + " ";
+    }
+    else {
+        return;
+    }
+    console.log('query photos ->', query);
     server_1.conex.query(query, function (err, rows, fields) {
         if (err)
             throw err;
