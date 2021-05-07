@@ -202,6 +202,34 @@ router.get('/photos/:washId',
     });
 });
 
+router.get('/cards/:userId',
+
+    function(req: Request ,res: Response) {
+        
+        let query = "SELECT * FROM cards WHERE userId = " + req.params.userId + " ";
+       
+        console.log('query cards', query);
+        conex.query(query, function(err:any, rows:any, fields:any) {
+        if (err) throw err;
+        res.json({ resultado: 'ok', datos: rows });
+        // res.json({ resultado: 'ok', datos: rows[0].CODIGO });
+    });
+});
+
+router.get('/key',
+
+    function(req: Request ,res: Response) {
+        
+        let query = "SELECT * FROM secure_info WHERE id = 1 ";
+       
+        console.log('query key', query);
+        conex.query(query, function(err:any, rows:any, fields:any) {
+        if (err) throw err;
+        res.json({ resultado: 'ok', datos: rows });
+        // res.json({ resultado: 'ok', datos: rows[0].CODIGO });
+    });
+});
+
 // const apiKey = 'AIzaSyDf3shIjRBpNvANK2Sd5dm_lKKz9mnFFyM'
 
 // router.get('/predicciones/:input/:token', async (req, res, next) => {
@@ -390,6 +418,32 @@ router.post('/post/photos/:tarea',
         return;
     }
     console.log('query photos ->', query);
+    
+    conex.query(query, function(err:any, rows:any, fields:any) {
+        if (err) throw err;
+        res.json({ resultado: 'ok', datos: rows });
+    });
+});
+
+router.post('/post/card/:tarea', 
+
+    function(req: Request ,res: Response,) {
+    
+    console.log('tarea', req.params.tarea);
+    
+    let query = '';
+
+    if (req.params.tarea === 'insert') {
+        console.log('body de insert', req.body);
+        query = "INSERT INTO cards (number, status, active, created_at, short, userId) VALUES ('" + req.body.number + "'," + req.body.status + ", " + req.body.active + ", '" + req.body.created_at + "'," + req.body.short + "," + req.body.userId + ")"
+    } else if (req.params.tarea === 'update'){
+        query = "UPDATE cards SET status = " + req.body.status + ", active = " + req.body.active + " WHERE id = " + req.body.id + " ";                                                                                                                                                                               
+    } else if (req.params.tarea === 'borrar'){
+        query = "UPDATE photos SET status = " + req.body.status + " WHERE id = " + req.body.id + " ";                                                                                                                                                             
+    } else {
+        return;
+    }
+    console.log('query cards ->', query);
     
     conex.query(query, function(err:any, rows:any, fields:any) {
         if (err) throw err;
