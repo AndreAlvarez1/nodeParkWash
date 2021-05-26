@@ -131,9 +131,9 @@ router.get('/washes/:fechaIni/:fechaFin/:recinto',
 
     function(req: Request ,res: Response) {
         
-        let query = "SELECT w.id, w.washerId, w.status, w.carId, w.recintoId, r.nombre as recinto, w.discount, w.receipt, w.observation, w.washDate, w.updateDate, c.patente, c.marca, c.modelo, c.color, c.tipo, c.size, u.firstName as washerFirst, u.lastName as washerLast, p.description FROM wash w  LEFT JOIN users u ON w.washerId = u.id  LEFT JOIN cars c ON w.carId = c.id LEFT JOIN plans p ON c.planId = p.id LEFT JOIN recintos r ON w.recintoId = r.id  where w.washDate between '" + req.params.fechaIni + "' AND '" + req.params.fechaFin + "' AND w.recintoId = '" + req.params.recinto + "'  ";
+        let query = "SELECT w.id, w.washerId, w.status, w.carId, w.recintoId, r.nombre as recinto, w.discount, w.receipt, w.observation, w.washDate, w.updateDate, c.patente, c.marca, c.modelo, c.color, c.tipo, c.size, u.firstName as washerFirst, u.lastName as washerLast, p.description, p.name as planName FROM wash w  LEFT JOIN users u ON w.washerId = u.id  LEFT JOIN cars c ON w.carId = c.id LEFT JOIN plans p ON c.planId = p.id LEFT JOIN recintos r ON w.recintoId = r.id  where w.washDate between '" + req.params.fechaIni + "' AND '" + req.params.fechaFin + "' AND w.recintoId = '" + req.params.recinto + "'  ";
         if (req.params.recinto === 'Todos'){
-         query = "SELECT w.id, w.washerId, w.status, w.carId, w.recintoId, r.nombre as recinto, w.discount, w.receipt, w.observation, w.washDate, w.updateDate, c.patente, c.marca, c.modelo, c.color, c.tipo, c.size, u.firstName as washerFirst, u.lastName as washerLast, p.description FROM wash w  LEFT JOIN users u ON w.washerId = u.id  LEFT JOIN cars c ON w.carId = c.id LEFT JOIN plans p ON c.planId = p.id LEFT JOIN recintos r ON w.recintoId = r.id  where w.washDate between '" + req.params.fechaIni + "' AND '" + req.params.fechaFin + "'   ";
+         query = "SELECT w.id, w.washerId, w.status, w.carId, w.recintoId, r.nombre as recinto, w.discount, w.receipt, w.observation, w.washDate, w.updateDate, c.patente, c.marca, c.modelo, c.color, c.tipo, c.size, u.firstName as washerFirst, u.lastName as washerLast, p.description, p.name as planName FROM wash w  LEFT JOIN users u ON w.washerId = u.id  LEFT JOIN cars c ON w.carId = c.id LEFT JOIN plans p ON c.planId = p.id LEFT JOIN recintos r ON w.recintoId = r.id  where w.washDate between '" + req.params.fechaIni + "' AND '" + req.params.fechaFin + "'   ";
         }
         console.log('query washes', query);
         conex.query(query, function(err:any, rows:any, fields:any) {
@@ -276,13 +276,11 @@ router.post('/post/usuarios/:tarea',
     console.log('tarea', req.params.tarea);
     
     let query = '';
-
-
     if (req.params.tarea === 'insert') {
         console.log('body de insert', req.body);
-        query = "INSERT INTO users (firstName, lastName, cellphone, email, gender, rut, address, city, lat, lng, status, level) VALUES ('" + req.body.firstName + "', '" + req.body.lastName + "', '" + req.body.cellphone + "', '" + req.body.email + "', '" + req.body.gender + "', '" + req.body.rut + "', '" + req.body.address + "','" + req.body.city + "'," + req.body.lat + "," + req.body.lng + ",1,1)"
+        query = "INSERT INTO users (firstName, lastName, cellphone, email, gender, rut, address, city, lat, lng, status, level, notToday) VALUES ('" + req.body.firstName + "', '" + req.body.lastName + "', '" + req.body.cellphone + "', '" + req.body.email + "', '" + req.body.gender + "', '" + req.body.rut + "', '" + req.body.address + "','" + req.body.city + "'," + req.body.lat + "," + req.body.lng + ",1,1," + req.body.notToday + ")"
     } else if (req.params.tarea === 'update'){
-        query = "UPDATE users SET firstName = '" + req.body.firstName + "', lastName = '" + req.body.lastName + "', cellphone = '" + req.body.cellphone + "', email = '" + req.body.email + "', gender = '" + req.body.gender + "', rut = '" + req.body.rut + "', rut = '" + req.body.rut + "', address = '" + req.body.address + "', city = '" + req.body.city + "', lat = " + req.body.lat + ", lng = '" + req.body.lng + "', status = " + req.body.gender + ",  level = " + req.body.level + "  WHERE id = " + req.body.id + " ";
+        query = "UPDATE users SET firstName = '" + req.body.firstName + "', lastName = '" + req.body.lastName + "', cellphone = '" + req.body.cellphone + "', email = '" + req.body.email + "', gender = '" + req.body.gender + "', rut = '" + req.body.rut + "', rut = '" + req.body.rut + "', address = '" + req.body.address + "', city = '" + req.body.city + "', lat = " + req.body.lat + ", lng = '" + req.body.lng + "', status = " + req.body.gender + ",  level = " + req.body.level + ", notToday = " + req.body.notToday + "  WHERE id = " + req.body.id + " ";
                                                                                                                                                                                  
     } else if (req.params.tarea === 'borrar') {
         query = "UPDATE users SET status = 0 WHERE id = " + req.body.id + " ";
@@ -297,10 +295,8 @@ router.post('/post/usuarios/:tarea',
     });
 });
 
-
 // CREAR PLANES
 // INSERT INTO plans (name, description, recintoId, price_normal_car, price_big_car, frequency_top, frequency_full, status) VALUE ('DeMaria Platinum', 'Lavado Top Exterior y Full Wash intercalados cada 2 semanas', 1, 14990, 19990, 2, 2, 1)
-
 
 router.post('/post/oferta/:tarea', 
 
@@ -429,7 +425,7 @@ router.post('/post/card/:tarea',
 
     function(req: Request ,res: Response,) {
     
-    console.log('tarea', req.params.tarea);
+    console.log('Tarea aqui', req.params.tarea);
     
     let query = '';
 
@@ -437,9 +433,11 @@ router.post('/post/card/:tarea',
         console.log('body de insert', req.body);
         query = "INSERT INTO cards (number, status, active, created_at, short, userId) VALUES ('" + req.body.number + "'," + req.body.status + ", " + req.body.active + ", '" + req.body.created_at + "'," + req.body.short + "," + req.body.userId + ")"
     } else if (req.params.tarea === 'update'){
+        console.log('body de update', req.body);
+
         query = "UPDATE cards SET status = " + req.body.status + ", active = " + req.body.active + " WHERE id = " + req.body.id + " ";                                                                                                                                                                               
     } else if (req.params.tarea === 'borrar'){
-        query = "UPDATE photos SET status = " + req.body.status + " WHERE id = " + req.body.id + " ";                                                                                                                                                             
+        query = "UPDATE cards SET status = 0 WHERE id = " + req.body.id + " ";                                                                                                                                                             
     } else {
         return;
     }
