@@ -89,7 +89,7 @@ router.get('/users',
 
     function(req: Request ,res: Response) {
         
-        const query = "SELECT * FROM users"
+        const query = "SELECT * FROM users ORDER BY id DESC"
 
         conex.query(query, function(err:any, rows:any, fields:any) {
         if (err) throw err;
@@ -280,7 +280,7 @@ router.post('/post/usuarios/:tarea',
         console.log('body de insert', req.body);
         query = "INSERT INTO users (firstName, lastName, cellphone, email, gender, rut, address, city, lat, lng, status, level, notToday) VALUES ('" + req.body.firstName + "', '" + req.body.lastName + "', '" + req.body.cellphone + "', '" + req.body.email + "', '" + req.body.gender + "', '" + req.body.rut + "', '" + req.body.address + "','" + req.body.city + "'," + req.body.lat + "," + req.body.lng + ",1,1," + req.body.notToday + ")"
     } else if (req.params.tarea === 'update'){
-        query = "UPDATE users SET firstName = '" + req.body.firstName + "', lastName = '" + req.body.lastName + "', cellphone = '" + req.body.cellphone + "', email = '" + req.body.email + "', gender = '" + req.body.gender + "', rut = '" + req.body.rut + "', rut = '" + req.body.rut + "', address = '" + req.body.address + "', city = '" + req.body.city + "', lat = " + req.body.lat + ", lng = '" + req.body.lng + "', status = " + req.body.gender + ",  level = " + req.body.level + ", notToday = " + req.body.notToday + "  WHERE id = " + req.body.id + " ";
+        query = "UPDATE users SET firstName = '" + req.body.firstName + "', lastName = '" + req.body.lastName + "', cellphone = '" + req.body.cellphone + "', email = '" + req.body.email + "', gender = '" + req.body.gender + "', rut = '" + req.body.rut + "', address = '" + req.body.address + "', city = '" + req.body.city + "', lat = " + req.body.lat + ", lng = '" + req.body.lng + "', status = " + req.body.status + ",  level = " + req.body.level + ", notToday = " + req.body.notToday + "  WHERE id = " + req.body.id + " ";
                                                                                                                                                                                  
     } else if (req.params.tarea === 'borrar') {
         query = "UPDATE users SET status = 0 WHERE id = " + req.body.id + " ";
