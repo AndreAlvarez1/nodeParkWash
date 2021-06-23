@@ -278,9 +278,9 @@ router.post('/post/usuarios/:tarea',
     let query = '';
     if (req.params.tarea === 'insert') {
         console.log('body de insert', req.body);
-        query = "INSERT INTO users (firstName, lastName, cellphone, email, gender, rut, address, city, lat, lng, status, level, notToday) VALUES ('" + req.body.firstName + "', '" + req.body.lastName + "', '" + req.body.cellphone + "', '" + req.body.email + "', '" + req.body.gender + "', '" + req.body.rut + "', '" + req.body.address + "','" + req.body.city + "'," + req.body.lat + "," + req.body.lng + ",1,1," + req.body.notToday + ")"
+        query = "INSERT INTO users (firstName, lastName, cellphone, email, gender, rut, address, city, lat, lng, status, level) VALUES ('" + req.body.firstName + "', '" + req.body.lastName + "', '" + req.body.cellphone + "', '" + req.body.email + "', '" + req.body.gender + "', '" + req.body.rut + "', '" + req.body.address + "','" + req.body.city + "'," + req.body.lat + "," + req.body.lng + ",1,1)"
     } else if (req.params.tarea === 'update'){
-        query = "UPDATE users SET firstName = '" + req.body.firstName + "', lastName = '" + req.body.lastName + "', cellphone = '" + req.body.cellphone + "', email = '" + req.body.email + "', gender = '" + req.body.gender + "', rut = '" + req.body.rut + "', address = '" + req.body.address + "', city = '" + req.body.city + "', lat = " + req.body.lat + ", lng = '" + req.body.lng + "', status = " + req.body.status + ",  level = " + req.body.level + ", notToday = " + req.body.notToday + "  WHERE id = " + req.body.id + " ";
+        query = "UPDATE users SET firstName = '" + req.body.firstName + "', lastName = '" + req.body.lastName + "', cellphone = '" + req.body.cellphone + "', email = '" + req.body.email + "', gender = '" + req.body.gender + "', rut = '" + req.body.rut + "', address = '" + req.body.address + "', city = '" + req.body.city + "', lat = " + req.body.lat + ", lng = '" + req.body.lng + "', status = " + req.body.status + ",  level = " + req.body.level + "  WHERE id = " + req.body.id + " ";
                                                                                                                                                                                  
     } else if (req.params.tarea === 'borrar') {
         query = "UPDATE users SET status = 0 WHERE id = " + req.body.id + " ";
@@ -347,9 +347,9 @@ router.post('/post/cars/:tarea',
 
     if (req.params.tarea === 'insert') {
         console.log('body de insert', req.body);
-        query = "INSERT INTO cars (patente, marca, modelo, color, tipo, recintoId, userId, status, size, planId) VALUES ('" + req.body.patente + "', '" + req.body.marca + "', '" + req.body.modelo + "', '" + req.body.color + "', '" + req.body.tipo + "', " + req.body.recintoId + ", " + req.body.userId + ", 1, " + req.body.size + ", " + req.body.planId + ")"
+        query = "INSERT INTO cars (patente, marca, modelo, color, tipo, recintoId, userId, status, size, planId, notToday) VALUES ('" + req.body.patente + "', '" + req.body.marca + "', '" + req.body.modelo + "', '" + req.body.color + "', '" + req.body.tipo + "', " + req.body.recintoId + ", " + req.body.userId + ", 1, " + req.body.size + ", " + req.body.planId + ", " + req.body.notToday + ")" 
     } else if (req.params.tarea === 'update'){
-        query = "UPDATE cars SET patente = '" + req.body.patente + "', marca = '" + req.body.marca + "', modelo = '" + req.body.modelo + "', color = '" + req.body.color + "', tipo = '" + req.body.tipo + "', recintoId = '" + req.body.recintoId + "', recintoId = " + req.body.recintoId + ", status = " + req.body.status + ", size = " + req.body.size + ", planId = " + req.body.planId + " WHERE id = " + req.body.id + " ";
+        query = "UPDATE cars SET patente = '" + req.body.patente + "', marca = '" + req.body.marca + "', modelo = '" + req.body.modelo + "', color = '" + req.body.color + "', tipo = '" + req.body.tipo + "', recintoId = '" + req.body.recintoId + "', recintoId = " + req.body.recintoId + ", status = " + req.body.status + ", size = " + req.body.size + ", planId = " + req.body.planId + ",  notToday = " + req.body.notToday + " WHERE id = " + req.body.id + " ";
                                                                                                                                                                                  
     } else if (req.params.tarea === 'borrar') {
         query = "UPDATE cars SET status = 0 WHERE id = " + req.body.id + " ";
