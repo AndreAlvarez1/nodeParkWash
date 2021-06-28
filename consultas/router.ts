@@ -65,15 +65,16 @@ router.get('/cars/:user',
     });
 });
 
+
 router.get('/carsXrecinto/:recinto', 
 
     function(req: Request ,res: Response) {
 
-        let query =  "SELECT c.id, c.patente, c.marca, c.modelo, c.color, c.tipo, c.recintoId, r.nombre as recinto, c.status, c.size, c.planId, p.description, p.price_normal_car, p.price_big_car, p.frequency_top, p.frequency_full, c.userId, u.firstName, u.lastName, u.cellphone, u.lastName FROM cars c LEFT JOIN recintos r ON c.recintoId = r.id LEFT JOIN users u ON c.userId = u.id LEFT JOIN plans p ON c.planId = p.id where c.status > 0 AND c.recintoId =  '" + req.params.recinto + "'"
-        console.log('cars', req.params.recinto)
+        let query =  "SELECT c.id, c.notToday, c.patente, c.marca, c.modelo, c.color, c.tipo, c.recintoId, r.nombre as recinto, c.status, c.size, c.planId, p.description, p.price_normal_car, p.price_big_car, p.frequency_top, p.frequency_full, c.userId, u.firstName, u.lastName, u.cellphone, u.lastName FROM cars c LEFT JOIN recintos r ON c.recintoId = r.id LEFT JOIN users u ON c.userId = u.id LEFT JOIN plans p ON c.planId = p.id where c.status > 0 AND c.recintoId =  '" + req.params.recinto + "'"
+        console.log('cars x recinto', req.params.recinto)
         
         if( req.body.recinto === 'todos'){
-            query =  "SELECT c.id, c.patente, c.marca, c.modelo, c.color, c.tipo, c.recintoId, r.nombre as recinto, c.status, c.size, c.planId, p.description, p.price_normal_car, p.price_big_car, p.frequency_top, p.frequency_full, c.userId, u.firstName, u.lastName, u.cellphone, u.lastName FROM cars c LEFT JOIN recintos r ON c.recintoId = r.id LEFT JOIN users u ON c.userId = u.id LEFT JOIN plans p ON c.planId = p.id where c.status > 0 "
+            query =  "SELECT c.id, c.notToday, c.patente, c.marca, c.modelo, c.color, c.tipo, c.recintoId, r.nombre as recinto, c.status, c.size, c.planId, p.description, p.price_normal_car, p.price_big_car, p.frequency_top, p.frequency_full, c.userId, u.firstName, u.lastName, u.cellphone, u.lastName FROM cars c LEFT JOIN recintos r ON c.recintoId = r.id LEFT JOIN users u ON c.userId = u.id LEFT JOIN plans p ON c.planId = p.id where c.status > 0 "
         }
 
         conex.query(query, function(err:any, rows:any, fields:any) {
@@ -343,7 +344,6 @@ router.post('/post/cars/:tarea',
     console.log('tarea', req.params.tarea);
     
     let query = '';
-
 
     if (req.params.tarea === 'insert') {
         console.log('body de insert', req.body);
